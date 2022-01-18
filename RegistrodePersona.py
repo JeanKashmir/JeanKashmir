@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-###MODIFICADO Por JeanKashmir
+#JeanKashmir
+#Sistema de Control de Acceso bajo el dispositivo Raspberry y sistema operativo Raspbian.
+#Se utiliza en esta ocasion LibreOffice
+
 
 #Aun esta en proceso de Modificacion
 #18-01-2022
@@ -77,6 +80,7 @@ if opcion== 1 :
         time.sleep(2)
 
         print('\033[1m' + Fore.GREEN +'Vuelva a colocar la huella'  + '\033[0m')
+        print ('\033[1m' + Fore.GREEN + 'By: JeanKashmir' + '\033[0m')
 
         while ( f.readImage() == False ):
             pass
