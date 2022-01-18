@@ -9,12 +9,6 @@
 #Aun esta en proceso de Modificacion
 #18-01-2022
 
-"""
-PyFingerprint
-Copyright (C) 2015 Bastian Raschke <bastian.raschke@posteo.de>
-All rights reserved.
-
-"""
 import os
 import hashlib
 import uno
