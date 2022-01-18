@@ -3,6 +3,9 @@
 
 ###MODIFICADO Por JeanKashmir
 
+#Aun esta en proceso de Modificacion
+#18-01-2022
+
 """
 PyFingerprint
 Copyright (C) 2015 Bastian Raschke <bastian.raschke@posteo.de>
@@ -39,38 +42,35 @@ if opcion== 1 :
     os.system('clear')
     print ('\033[1m' + Fore.YELLOW + "Cargando..."+ '\033[0m' )
     time.sleep(1)
-    ## Enrolls new finger
+    ## Registrar huella
     
-    ## Tries to initialize the sensor
+  
     try:
         f = PyFingerprint('/dev/ttyUSB0', 57600, 0xFFFFFFFF, 0x00000000)
 
         if ( f.verifyPassword() == False ):
-            raise ValueError('The given fingerprint sensor password is wrong!')
+            raise ValueError('Ups! Existe un error')
 
     except Exception as e:
-        print('The fingerprint sensor could not be initialized!')
-        print('Exception message: ' + str(e))
+        print('Ups! El error no inicio correctamente')
+        print('ID: ' + str(e))
         exit(1)
 
-
-    ## Tries to enroll new finger
     try:
         print('\033[1m' + Fore.GREEN +'Ingrese Huella...' + '\033[0m')
 
-        ## Wait that finger is read
+     
         while ( f.readImage() == False ):
             pass
 
-        ## Converts read image to characteristics and stores it in charbuffer 1
+    
         f.convertImage(0x01)
 
-        ## Checks if finger is already enrolled
         result = f.searchTemplate()
         positionNumber = result[0]
 
         if ( positionNumber >= 0 ):
-            print('Template already exists at position #' + str(positionNumber))
+            print('La huella ya existe. Se encuentra en la posicion' + str(positionNumber))
             exit(0)
 
         print('\033[1m' + Fore.GREEN +'Saque el dedo' + '\033[0m')
@@ -78,27 +78,25 @@ if opcion== 1 :
 
         print('\033[1m' + Fore.GREEN +'Vuelva a colocar la huella'  + '\033[0m')
 
-        ## Wait that finger is read again
         while ( f.readImage() == False ):
             pass
 
-        ## Converts read image to characteristics and stores it in charbuffer 2
         f.convertImage(0x02)
 
-        ## Compares the charbuffers
+      
         if ( f.compareCharacteristics() == 0 ):
-            raise Exception('Fingers do not match')
+            raise Exception('Ups! no se pudo sincronizar')
 
-        ## Creates a template
+       
         f.createTemplate()
 
-        ## Saves template at new position number
+  
         positionNumber = f.storeTemplate()
         print('\033[1m' + Fore.GREEN +'Enrolado exitoso' + '\033[0m')
 
     except Exception as e:
-        print('Operation failed!')
-        print('Exception message: ' + str(e))
+        print('Fallo encontrado')
+        print('ID: ' + str(e))
         exit(1)
 
 
@@ -106,33 +104,28 @@ if opcion== 1 :
 
 elif opcion== 2:
     
-    ## Tries to initialize the sensor
     try:
         f = PyFingerprint('/dev/ttyUSB0', 57600, 0xFFFFFFFF, 0x00000000)
 
         if ( f.verifyPassword() == False ):
-            raise ValueError('The given fingerprint sensor password is wrong!')
+            raise ValueError('Ups! Hubo un problema')
 
     except Exception as e:
-        print('The fingerprint sensor could not be initialized!')
-        print('Exception message: ' + str(e))
+        print('Error encontrado!')
+        print('ID: ' + str(e))
         exit(1)
 
-    ## Gets some sensor information
     print('\033[1m' + Fore.YELLOW + 'Sistema de Control de Acceso: PARRONALES DE NOS 2' + '\033[0m')
 
-    ## Tries to search the finger and calculate hash
     try:
         print('\033[1m' + Fore.BLUE + 'Ingrese su huella...' +'\033[0m')
 
-        ## Wait that finger is read
         while ( f.readImage() == False ):
             pass
 
-        ## Converts read image to characteristics and stores it in charbuffer 1
+
         f.convertImage(0x01)
 
-        ## Searchs template
         result = f.searchTemplate()
 
         positionNumber = result[0]
@@ -146,16 +139,11 @@ elif opcion== 2:
       
 
 
-        ## OPTIONAL stuff
-        ##
-
-        ## Loads the found template to charbuffer 1
         f.loadTemplate(positionNumber, 0x01)
 
-        ## Downloads the characteristics of template loaded in charbuffer 1
         characterics = str(f.downloadCharacteristics(0x01)).encode('utf-8')
 
-        ## Hashes characteristics of template
+
     
         excel=hashlib.sha256(characterics).hexdigest()
     
@@ -169,13 +157,12 @@ elif opcion== 2:
         document= desktop.getCurrentComponent()
         document.getTitle()
 
-        #X
+        #Planilla
         sheets= document.getSheets()
         sheets.getByIndex(0)
 
         #Seleccionando Celda
         sheets.getByIndex(0).getCellRangeByName("J4")
-
         sheets.getByIndex(0).getCellRangeByName("J4").setString(excel)
     
         time.sleep(1)
@@ -185,6 +172,6 @@ elif opcion== 2:
 
 
     except Exception as e:
-        print('Operation failed!')
-        print('Exception message: ' + str(e))
+        print('Ups! Error hubo un error')
+        print('ID: ' + str(e))
         exit(1)
